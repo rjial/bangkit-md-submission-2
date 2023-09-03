@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Github Profile</string>
+    <string name="cari_username">Cari username</string>
 </resources>
