@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.title =  "Github User's Search"
         val layoutManager = LinearLayoutManager(this)
         binding.rvProfiles.layoutManager = layoutManager
         val decorDividerItem = DividerItemDecoration(this, layoutManager.orientation)
