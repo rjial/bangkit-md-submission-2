@@ -2,6 +2,7 @@ package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -38,6 +39,22 @@ class MainActivity : AppCompatActivity() {
             if(it != null) {
                 binding.rvProfiles.adapter= SearchGithubAdapter(it)
             }
+        }
+        searchViewModel.isLoading.observe(this) {
+                when(it) {
+                    true -> {
+                        binding.pbSearch.visibility = View.VISIBLE
+                        binding.rvProfiles.visibility = View.INVISIBLE
+                    }
+                    false -> {
+                        binding.pbSearch.visibility = View.INVISIBLE
+                        binding.rvProfiles.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        binding.pbSearch.visibility = View.INVISIBLE
+                        binding.rvProfiles.visibility = View.INVISIBLE
+                    }
+                }
         }
     }
 }
