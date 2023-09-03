@@ -1,4 +1,4 @@
-package com.rjial.githubprofile
+package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
