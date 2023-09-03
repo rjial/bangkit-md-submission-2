@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.rjial.githubprofile.databinding.ActivityMainBinding
 import com.rjial.githubprofile.model.viewmodel.SearchViewModel
+import com.rjial.githubprofile.ui.adapter.SearchGithubAdapter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -16,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvProfiles.layoutManager = layoutManager
+        val decorDividerItem = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvProfiles.addItemDecoration(decorDividerItem)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         binding.searchView.setupWithSearchBar(binding.searchBar)
         binding.searchView
@@ -26,8 +33,10 @@ class MainActivity : AppCompatActivity() {
                 searchViewModel.searchProfile(v.text.toString())
                 false
             }
-        searchViewModel.searchText.observe(this) {
-            Snackbar.make(window.decorView.rootView, it, Snackbar.LENGTH_SHORT).show()
+        searchViewModel.searchResult.observe(this) {
+            if(it != null) {
+                binding.rvProfiles.adapter= SearchGithubAdapter(it)
+            }
         }
     }
 }
