@@ -51,6 +51,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
     testImplementation("junit:junit:4.13.2")
