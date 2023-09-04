@@ -1,7 +1,10 @@
 package com.rjial.githubprofile.model.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class DetailUsernameResponse(
 
 	@field:SerializedName("gists_url")
@@ -17,10 +20,10 @@ data class DetailUsernameResponse(
 	val followingUrl: String,
 
 	@field:SerializedName("twitter_username")
-	val twitterUsername: Any,
+	val twitterUsername: String?,
 
 	@field:SerializedName("bio")
-	val bio: String,
+	val bio: String? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String,
@@ -56,7 +59,7 @@ data class DetailUsernameResponse(
 	val collaborators: Int,
 
 	@field:SerializedName("company")
-	val company: Any,
+	val company: String? = null,
 
 	@field:SerializedName("owned_private_repos")
 	val ownedPrivateRepos: Int,
@@ -71,16 +74,16 @@ data class DetailUsernameResponse(
 	val gravatarId: String,
 
 	@field:SerializedName("plan")
-	val plan: Plan,
+	val plan: Plan? = null,
 
 	@field:SerializedName("email")
-	val email: Any,
+	val email: String? = null,
 
 	@field:SerializedName("organizations_url")
 	val organizationsUrl: String,
 
 	@field:SerializedName("hireable")
-	val hireable: Any,
+	val hireable: Boolean? = null,
 
 	@field:SerializedName("starred_url")
 	val starredUrl: String,
@@ -113,15 +116,16 @@ data class DetailUsernameResponse(
 	val following: Int,
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String? = null,
 
 	@field:SerializedName("location")
-	val location: String,
+	val location: String? = null,
 
 	@field:SerializedName("node_id")
 	val nodeId: String
-)
+) : Parcelable
 
+@Parcelize
 data class Plan(
 
 	@field:SerializedName("private_repos")
@@ -135,4 +139,4 @@ data class Plan(
 
 	@field:SerializedName("space")
 	val space: Int
-)
+) : Parcelable

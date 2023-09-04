@@ -1,5 +1,6 @@
 package com.rjial.githubprofile.ui.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.rjial.githubprofile.model.response.UsernameFollowingResponse
 import com.rjial.githubprofile.model.response.UsernameFollowingResponseItem
 import com.rjial.githubprofile.service.ApiService
 import com.rjial.githubprofile.service.SearchAPIInterface
+import com.rjial.githubprofile.ui.DetailProfileActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +34,17 @@ class SearchGithubAdapter(val listProfile: List<ItemsItem>): RecyclerView.Adapte
                         if (response.isSuccessful && body != null) {
                             binding.tvNameProfile.text = if (body.name != null) "${body.name} (${body.login})" else "${body.login}"
                             binding.tvUsernameProfile.text = "${body.publicRepos} Public Repos - ${body.followers} Followers - ${body.following} Following"
+                            binding.root.setOnClickListener {
+                                try {
+                                    val intent = Intent(it.context, DetailProfileActivity::class.java)
+                                    intent.putExtra(DetailProfileActivity.DETAIL_PROFILE, body)
+                                    it.context.startActivity(intent)
+                                } catch(e: Exception) {
+                                    Log.e("PARCEL_ERROR", e.message!!)
+                                    e.printStackTrace()
+                                }
+
+                            }
                         } else {
                             binding.tvNameProfile.text = result.login
                             binding.tvUsernameProfile.text = "Failed fetch detail"
