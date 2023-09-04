@@ -1,5 +1,6 @@
 package com.rjial.githubprofile.service
 
+import android.util.Log
 import io.github.cdimascio.dotenv.dotenv
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -17,21 +18,18 @@ class ApiService {
             val authInterceptor = Interceptor {
                 val req = it.request()
                 val requestHeaders = req.newBuilder()
-                    .addHeader("Authorization", "token ${dotenv["GHP_TOKEN"] ?: ""}")
+                    .addHeader("Authorization", "Bearer ${dotenv["GHP_TOKEN"] ?: ""}")
                     .build()
                 it.proceed(requestHeaders)
             }
-            val logClient = OkHttpClient.Builder()
+            val interceptor = OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build()
-            val authClient = OkHttpClient.Builder()
                 .addInterceptor(authInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(authClient)
-                .client(logClient)
+                .client(interceptor)
                 .build()
 
             return retrofit.create(T::class.java)
