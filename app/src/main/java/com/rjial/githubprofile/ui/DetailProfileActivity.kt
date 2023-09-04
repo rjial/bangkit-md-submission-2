@@ -1,8 +1,10 @@
 package com.rjial.githubprofile.ui
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityDetailProfileBinding
@@ -36,6 +38,18 @@ class DetailProfileActivity : AppCompatActivity() {
                 else -> ""
             }
         }.attach()
+        Glide.with(this)
+            .load(extra?.avatarUrl)
+            .into(binding.imgDetailPhotoProfile)
+        if(extra?.name  != null) {
+            binding.tvDetailNameProfile.text = extra?.name
+            binding.tvDetailUserNameProfile.text = extra?.login
+        }else {
+            binding.tvDetailNameProfile.text = extra?.login
+        }
+        requireNotNull(extra).apply {
+            binding.tvDetailDescProfile.text = "${this.publicRepos} repos - ${this.followers} Followers - ${this.following} Following"
+        }
 
     }
 }
