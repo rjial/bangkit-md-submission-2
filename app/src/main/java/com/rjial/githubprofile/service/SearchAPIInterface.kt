@@ -2,6 +2,7 @@ package com.rjial.githubprofile.service
 
 import com.rjial.githubprofile.model.response.DetailUsernameResponse
 import com.rjial.githubprofile.model.response.SearchGithubResponse
+import com.rjial.githubprofile.model.response.UsernameFollowersResponseItem
 import com.rjial.githubprofile.model.response.UsernameFollowingResponse
 import com.rjial.githubprofile.model.response.UsernameFollowingResponseItem
 import retrofit2.Call
@@ -15,6 +16,9 @@ interface SearchAPIInterface {
 
     @GET("users/{username}/following")
     fun getUsernameFollowing(@Path("username") username: String): Call<List<UsernameFollowingResponseItem>>
+
+    @GET("users/{username}/followers")
+    fun getUsernameFollowers(@Path("username") username: String): Call<List<UsernameFollowersResponseItem>>
 
     @GET("users/{username}")
     fun getDetailUsername(@Path("username") username: String): Call<DetailUsernameResponse>

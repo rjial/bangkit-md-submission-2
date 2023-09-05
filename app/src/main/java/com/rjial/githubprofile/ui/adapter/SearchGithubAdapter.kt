@@ -24,6 +24,18 @@ class SearchGithubAdapter(val listProfile: List<ItemsItem>): RecyclerView.Adapte
     class ViewHolder(val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         private val apiService = ApiService.getService<SearchAPIInterface>()
         fun applyProfile(result: ItemsItem) {
+            binding.tvNameProfile.text = result.login
+            binding.root.setOnClickListener {
+                try {
+                    val intent = Intent(it.context, DetailProfileActivity::class.java)
+                    intent.putExtra(DetailProfileActivity.DETAIL_PROFILE, result.login)
+                    it.context.startActivity(intent)
+                } catch(e: Exception) {
+                    Log.e("PARCEL_ERROR", e.message!!)
+                    e.printStackTrace()
+                }
+
+            }
             apiService.getDetailUsername(result.login)
                 .enqueue(object: Callback<DetailUsernameResponse> {
                     override fun onResponse(
@@ -32,19 +44,8 @@ class SearchGithubAdapter(val listProfile: List<ItemsItem>): RecyclerView.Adapte
                     ) {
                         val body = response.body()
                         if (response.isSuccessful && body != null) {
-                            binding.tvNameProfile.text = if (body.name != null) "${body.name} (${body.login})" else "${body.login}"
-                            binding.tvUsernameProfile.text = "${body.publicRepos} Public Repos - ${body.followers} Followers - ${body.following} Following"
-                            binding.root.setOnClickListener {
-                                try {
-                                    val intent = Intent(it.context, DetailProfileActivity::class.java)
-                                    intent.putExtra(DetailProfileActivity.DETAIL_PROFILE, body)
-                                    it.context.startActivity(intent)
-                                } catch(e: Exception) {
-                                    Log.e("PARCEL_ERROR", e.message!!)
-                                    e.printStackTrace()
-                                }
 
-                            }
+
                         } else {
                             binding.tvNameProfile.text = result.login
                             binding.tvUsernameProfile.text = "Failed fetch detail"
