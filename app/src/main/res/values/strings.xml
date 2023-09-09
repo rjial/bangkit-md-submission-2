@@ -3,4 +3,6 @@
     <string name="cari_username">Cari username</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Settings</string>
+    <string name="favorite">Favorite</string>
 </resources>

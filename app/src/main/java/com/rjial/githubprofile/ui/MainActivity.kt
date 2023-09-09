@@ -2,12 +2,14 @@ package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityMainBinding
 import com.rjial.githubprofile.model.viewmodel.SearchViewModel
 import com.rjial.githubprofile.ui.adapter.SearchGithubAdapter
@@ -56,5 +58,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
