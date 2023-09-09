@@ -1,8 +1,10 @@
 package com.rjial.githubprofile.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -64,5 +66,19 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_favorite -> {
+                val favIntent = Intent(this@MainActivity, FavoriteActivity::class.java)
+                startActivity(favIntent)
+            }
+            R.id.menu_settings -> {
+                val setIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(setIntent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
