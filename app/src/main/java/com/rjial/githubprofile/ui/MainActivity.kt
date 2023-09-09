@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+//        supportActionBar?.hide()
         val layoutManager = LinearLayoutManager(this)
         binding.rvProfiles.layoutManager = layoutManager
         val decorDividerItem = DividerItemDecoration(this, layoutManager.orientation)
