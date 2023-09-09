@@ -2,8 +2,14 @@ package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivitySettingsBinding
+import com.rjial.githubprofile.datastore.SettingsDatastore
+import com.rjial.githubprofile.datastore.datastore
+import com.rjial.githubprofile.model.viewmodel.SettingViewModel
+import com.rjial.githubprofile.service.ViewModelFactory
 import com.rjial.githubprofile.ui.fragment.PreferenceFragment
 
 class SettingsActivity : AppCompatActivity() {
@@ -12,6 +18,19 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val setPref = SettingsDatastore.getInstance(application.datastore)
+        val setViewModel = ViewModelProvider(this, ViewModelFactory(setPref))[SettingViewModel::class.java]
+
+        setViewModel.isDarkMode.observe(this) {
+            when(it) {
+                true -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+                false -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
+        }
 
         supportFragmentManager
             .beginTransaction()
