@@ -20,9 +20,15 @@ interface FavoriteDao {
     @Delete()
     fun deleteFavorite(fav: UsernameFavoriteEntity)
 
+    @Query("DELETE FROM usernamefavoriteentity WHERE login = :login")
+    fun deleteFavoriteByLogin(login: String): Int
+
     @Query("SELECT * from usernamefavoriteentity ORDER BY id ASC")
     fun getAllFavorite(): LiveData<List<UsernameFavoriteEntity>>
 
     @Query("SELECT * from usernamefavoriteentity WHERE id_github = :idGithub")
     fun getFavByGithubId(idGithub: Int): LiveData<UsernameFavoriteEntity>
+
+    @Query("SELECT * from usernamefavoriteentity WHERE login = :idLogin")
+    fun getFavByGithubLogin(idLogin: String): LiveData<UsernameFavoriteEntity>
 }

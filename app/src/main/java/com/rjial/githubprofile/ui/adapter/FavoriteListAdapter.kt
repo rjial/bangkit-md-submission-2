@@ -33,34 +33,9 @@ class FavoriteListAdapter: ListAdapter<UsernameFavoriteEntity, FavoriteListAdapt
     class ViewHolder(val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         private val apiService = ApiService.getService<SearchAPIInterface>()
         fun bind(fav: UsernameFavoriteEntity) {
-            binding.tvNameProfile.text = fav.login
+            binding.tvNameProfile.text = fav.name
+            binding.tvUsernameProfile.text = fav.login
 
-            apiService.getDetailUsername(fav.login)
-                .enqueue(object: Callback<DetailUsernameResponse> {
-                    override fun onResponse(
-                        call: Call<DetailUsernameResponse>,
-                        response: Response<DetailUsernameResponse>
-                    ) {
-                        val body = response.body()
-                        if (response.isSuccessful && body != null) {
-                            if (body.name != null) {
-                                binding.tvNameProfile.text = body.name
-                                binding.tvUsernameProfile.text = body.login
-                            } else {
-                                binding.tvNameProfile.text = body.login
-                            }
-
-                        } else {
-                            binding.tvNameProfile.text = fav.login
-                            binding.tvUsernameProfile.text = "Failed fetch detail"
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DetailUsernameResponse>, t: Throwable) {
-                        binding.tvUsernameProfile.text = "Failed fetch detail"
-                    }
-
-                })
             Glide.with(binding.root.context)
                 .load(fav.avatarUrl)
                 .into(binding.imgPhotoProfile)

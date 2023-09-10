@@ -20,6 +20,7 @@ class FavoriteRepository(application: Application) {
     fun getAllFav(): LiveData<List<UsernameFavoriteEntity>> = favDao.getAllFavorite()
 
     fun getFavByGithubId(idGithub: Int): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubId(idGithub)
+    fun getFavByGithubLogin(idLogin: String): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubLogin(idLogin)
     fun insertFav(fav: UsernameFavoriteEntity) {
         executorService.execute {
             favDao.insertFavorite(fav)
@@ -33,6 +34,11 @@ class FavoriteRepository(application: Application) {
     fun deleteFav(fav: UsernameFavoriteEntity) {
         executorService.execute {
             favDao.deleteFavorite(fav)
+        }
+    }
+    fun deleteFavByLogin(login: String) {
+        executorService.execute {
+            favDao.deleteFavoriteByLogin(login)
         }
     }
 }

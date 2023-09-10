@@ -1,22 +1,28 @@
 package com.rjial.githubprofile.ui
 
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityDetailProfileBinding
-import com.rjial.githubprofile.model.response.DetailUsernameResponse
+import com.rjial.githubprofile.model.db.entity.UsernameFavoriteEntity
 import com.rjial.githubprofile.model.viewmodel.DetailViewModel
+import com.rjial.githubprofile.model.viewmodel.FavoriteViewModel
+import com.rjial.githubprofile.service.FavViewModelFactory
 import com.rjial.githubprofile.ui.adapter.DetailStateAdapter
 
 class DetailProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailProfileBinding
     private lateinit var detailViewModel: DetailViewModel
+    private val favoriteViewModel: FavoriteViewModel by viewModels<FavoriteViewModel> {
+        FavViewModelFactory.getInstance(application)
+    }
+    private lateinit var favoriteEntity: UsernameFavoriteEntity
+    private var isFav: Boolean = false
 
     companion object {
         const val DETAIL_PROFILE = "detail_profile"
@@ -71,9 +77,32 @@ class DetailProfileActivity : AppCompatActivity() {
                 }else {
                     binding.tvDetailNameProfile.text = it.login
                 }
+                with(it) {
+                    favoriteEntity = UsernameFavoriteEntity(null, login, id, publicRepos, email, followers, avatarUrl, following, name!!)
+                }
                 requireNotNull(it).apply {
                     binding.tvDetailDescProfile.text = "${this.publicRepos} repos - ${this.followers} Followers - ${this.following} Following"
                 }
+            }
+        }
+        favoriteViewModel.getFavByGithubLogin(extra).observe(this) {
+            when(it != null) {
+                true -> {
+                    favoriteEntity = it
+                    isFav = true
+                    binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_24))
+                }
+                false -> {
+                    isFav = false
+                    binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_border_24))
+                }
+            }
+        }
+        binding.fabFavorite.setOnClickListener {
+            if (isFav) {
+                favoriteViewModel.deleteByLogin(extra)
+            } else {
+                favoriteViewModel.insert(favoriteEntity)
             }
         }
 
