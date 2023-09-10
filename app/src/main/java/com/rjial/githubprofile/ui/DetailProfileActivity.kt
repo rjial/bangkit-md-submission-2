@@ -63,7 +63,6 @@ class DetailProfileActivity : AppCompatActivity() {
                         if (isFav) {
                             favoriteViewModel.deleteByLogin(extra)
                         } else {
-                            Log.d("FAV_ENTITY", favoriteEntity.toString())
                             favoriteViewModel.insert(favoriteEntity!!)
                         }
                     }
@@ -73,7 +72,6 @@ class DetailProfileActivity : AppCompatActivity() {
         detailViewModel.detail.observe(this) {
             if (it != null) {
                 favoriteEntity = UsernameFavoriteEntity(null, it.login, it.avatarUrl, it.name)
-                Log.d("FAV_ENTITY", favoriteEntity.toString())
                 val detailStateAdapter = DetailStateAdapter(this, it)
                 binding.vpDetail.adapter = detailStateAdapter
                 TabLayoutMediator(binding.tabs, binding.vpDetail) { tab, position ->

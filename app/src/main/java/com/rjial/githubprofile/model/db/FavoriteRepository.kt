@@ -23,7 +23,6 @@ class FavoriteRepository(application: Application) {
     fun getFavByGithubLogin(idLogin: String): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubLogin(idLogin)
     fun insertFav(fav: UsernameFavoriteEntity) {
         executorService.execute {
-            Log.d("INSERT_FAV", fav.toString())
             favDao.insertFavorite(fav)
         }
     }
