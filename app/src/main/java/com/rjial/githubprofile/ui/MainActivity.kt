@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-//        supportActionBar?.hide()
+        supportActionBar?.hide()
         val layoutManager = LinearLayoutManager(this)
         binding.rvProfiles.layoutManager = layoutManager
         val decorDividerItem = DividerItemDecoration(this, layoutManager.orientation)
@@ -78,25 +78,19 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.menu_favorite -> {
-                val favIntent = Intent(this@MainActivity, FavoriteActivity::class.java)
-                startActivity(favIntent)
+        binding.searchBar.inflateMenu(R.menu.main_menu)
+        binding.searchBar.setOnMenuItemClickListener { item ->
+            when(item.itemId) {
+                R.id.menu_favorite -> {
+                    val favIntent = Intent(this@MainActivity, FavoriteActivity::class.java)
+                    startActivity(favIntent)
+                }
+                R.id.menu_settings -> {
+                    val setIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                    startActivity(setIntent)
+                }
             }
-            R.id.menu_settings -> {
-                val setIntent = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(setIntent)
-            }
+            true
         }
-        return super.onOptionsItemSelected(item)
     }
 }
