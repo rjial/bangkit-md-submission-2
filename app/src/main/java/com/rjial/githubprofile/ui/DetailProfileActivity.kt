@@ -2,13 +2,11 @@ package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityDetailProfileBinding
@@ -22,7 +20,7 @@ class DetailProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailProfileBinding
     private lateinit var detailViewModel: DetailViewModel
     private val favoriteViewModel: FavoriteViewModel by viewModels<FavoriteViewModel> {
-        FavViewModelFactory.getInstance(application)
+        FavViewModelFactory.getInstance(this)
     }
     private var isFav: Boolean = false
     private var favoriteEntity: UsernameFavoriteEntity? = null
@@ -99,11 +97,11 @@ class DetailProfileActivity : AppCompatActivity() {
             when(it != null) {
                 true -> {
                     isFav = true
-                    binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_24))
+                    binding.fabFavorite.setImageDrawable(AppCompatResources.getDrawable(applicationContext, R.drawable.baseline_favorite_24))
                 }
                 false -> {
                     isFav = false
-                    binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_border_24))
+                    binding.fabFavorite.setImageDrawable(AppCompatResources.getDrawable(applicationContext, R.drawable.baseline_favorite_border_24))
                 }
             }
         }

@@ -3,22 +3,13 @@ package com.rjial.githubprofile.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityMainBinding
-import com.rjial.githubprofile.datastore.SettingsDatastore
-import com.rjial.githubprofile.datastore.datastore
 import com.rjial.githubprofile.model.viewmodel.SearchViewModel
-import com.rjial.githubprofile.model.viewmodel.SettingViewModel
-import com.rjial.githubprofile.service.ViewModelFactory
 import com.rjial.githubprofile.ui.adapter.SearchGithubAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -29,19 +20,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val setPref = SettingsDatastore.getInstance(application.datastore)
-        val setViewModel = ViewModelProvider(this, ViewModelFactory(setPref))[SettingViewModel::class.java]
-
-        setViewModel.isDarkMode.observe(this) {
-            when(it) {
-                true -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-                false -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-        }
+//        val setPref = SettingsDatastore.getInstance(application.datastore)
+//        val setViewModel = ViewModelProvider(this, ViewModelFactory(setPref))[SettingViewModel::class.java]
+//
+//        setViewModel.isDarkMode.observe(this) {
+//            when(it) {
+//                true -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                }
+//                false -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                }
+//            }
+//        }
         supportActionBar?.hide()
         val layoutManager = LinearLayoutManager(this)
         binding.rvProfiles.layoutManager = layoutManager
