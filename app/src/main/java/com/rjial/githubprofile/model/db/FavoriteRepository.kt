@@ -1,6 +1,7 @@
 package com.rjial.githubprofile.model.db
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.rjial.githubprofile.model.db.dao.FavoriteDao
 import com.rjial.githubprofile.model.db.database.FavoriteRoomDatabase
@@ -22,6 +23,7 @@ class FavoriteRepository(application: Application) {
     fun getFavByGithubLogin(idLogin: String): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubLogin(idLogin)
     fun insertFav(fav: UsernameFavoriteEntity) {
         executorService.execute {
+            Log.d("INSERT_FAV", fav.toString())
             favDao.insertFavorite(fav)
         }
     }

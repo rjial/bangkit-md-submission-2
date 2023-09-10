@@ -10,6 +10,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiService {
     companion object {
+        @Volatile
+        private var instance: SearchAPIInterface? = null
+
+        fun getInstance(): SearchAPIInterface {
+            return instance ?: synchronized(this) {
+                return instance ?: getService<SearchAPIInterface>()
+            }
+        }
         inline fun <reified T> getService(): T {
             val dotenv = dotenv {
                 directory = "/assets"

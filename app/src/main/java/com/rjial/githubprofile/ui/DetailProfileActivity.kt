@@ -2,10 +2,13 @@ package com.rjial.githubprofile.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityDetailProfileBinding
@@ -21,8 +24,8 @@ class DetailProfileActivity : AppCompatActivity() {
     private val favoriteViewModel: FavoriteViewModel by viewModels<FavoriteViewModel> {
         FavViewModelFactory.getInstance(application)
     }
-    private lateinit var favoriteEntity: UsernameFavoriteEntity
     private var isFav: Boolean = false
+    private var favoriteEntity: UsernameFavoriteEntity? = null
 
     companion object {
         const val DETAIL_PROFILE = "detail_profile"
@@ -46,6 +49,7 @@ class DetailProfileActivity : AppCompatActivity() {
                     binding.imgDetailPhotoProfile.visibility = View.INVISIBLE
                     binding.tvDetailUserNameProfile.visibility = View.INVISIBLE
                     binding.tvDetailDescProfile.visibility = View.INVISIBLE
+                    binding.fabFavorite.visibility = View.INVISIBLE
                 }
                 false -> {
                     binding.pbDetail.visibility = View.INVISIBLE
@@ -54,11 +58,22 @@ class DetailProfileActivity : AppCompatActivity() {
                     binding.imgDetailPhotoProfile.visibility = View.VISIBLE
                     binding.tvDetailUserNameProfile.visibility = View.VISIBLE
                     binding.tvDetailDescProfile.visibility = View.VISIBLE
+                    binding.fabFavorite.visibility = View.VISIBLE
+                    binding.fabFavorite.setOnClickListener {
+                        if (isFav) {
+                            favoriteViewModel.deleteByLogin(extra)
+                        } else {
+                            Log.d("FAV_ENTITY", favoriteEntity.toString())
+                            favoriteViewModel.insert(favoriteEntity!!)
+                        }
+                    }
                 }
             }
         }
         detailViewModel.detail.observe(this) {
             if (it != null) {
+                favoriteEntity = UsernameFavoriteEntity(null, it.login, it.avatarUrl, it.name)
+                Log.d("FAV_ENTITY", favoriteEntity.toString())
                 val detailStateAdapter = DetailStateAdapter(this, it)
                 binding.vpDetail.adapter = detailStateAdapter
                 TabLayoutMediator(binding.tabs, binding.vpDetail) { tab, position ->
@@ -77,9 +92,6 @@ class DetailProfileActivity : AppCompatActivity() {
                 }else {
                     binding.tvDetailNameProfile.text = it.login
                 }
-                with(it) {
-                    favoriteEntity = UsernameFavoriteEntity(0, login, avatarUrl, name)
-                }
                 requireNotNull(it).apply {
                     binding.tvDetailDescProfile.text = "${this.publicRepos} repos - ${this.followers} Followers - ${this.following} Following"
                 }
@@ -88,7 +100,6 @@ class DetailProfileActivity : AppCompatActivity() {
         favoriteViewModel.getFavByGithubLogin(extra).observe(this) {
             when(it != null) {
                 true -> {
-                    favoriteEntity = it
                     isFav = true
                     binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_24))
                 }
@@ -96,13 +107,6 @@ class DetailProfileActivity : AppCompatActivity() {
                     isFav = false
                     binding.fabFavorite.setImageDrawable(getDrawable(R.drawable.baseline_favorite_border_24))
                 }
-            }
-        }
-        binding.fabFavorite.setOnClickListener {
-            if (isFav) {
-                favoriteViewModel.deleteByLogin(extra)
-            } else {
-                favoriteViewModel.insert(favoriteEntity)
             }
         }
 
