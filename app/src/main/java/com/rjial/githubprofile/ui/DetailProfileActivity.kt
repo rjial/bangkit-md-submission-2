@@ -78,7 +78,7 @@ class DetailProfileActivity : AppCompatActivity() {
                     binding.tvDetailNameProfile.text = it.login
                 }
                 with(it) {
-                    favoriteEntity = UsernameFavoriteEntity(null, login, id, publicRepos, email, followers, avatarUrl, following, name!!)
+                    favoriteEntity = UsernameFavoriteEntity(0, login, avatarUrl, name)
                 }
                 requireNotNull(it).apply {
                     binding.tvDetailDescProfile.text = "${this.publicRepos} repos - ${this.followers} Followers - ${this.following} Following"

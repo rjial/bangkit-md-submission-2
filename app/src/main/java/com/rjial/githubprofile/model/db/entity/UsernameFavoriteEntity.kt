@@ -14,18 +14,8 @@ data class UsernameFavoriteEntity(
     var id: Int? = 0,
     @ColumnInfo(name = "login")
     var login: String,
-    @ColumnInfo(name = "id_github")
-    var idGithub: Int,
-    @ColumnInfo(name = "public_repos")
-    var publicRepos: Int,
-    @ColumnInfo(name = "email")
-    var email: String? = null,
-    @ColumnInfo(name = "followers")
-    var followers: Int,
     @ColumnInfo(name = "avatar_url")
     var avatarUrl: String,
-    @ColumnInfo(name = "following")
-    var following: Int,
     @ColumnInfo(name = "name")
-    var name: String,
+    var name: String?,
 ) : Parcelable

@@ -19,7 +19,6 @@ class FavoriteRepository(application: Application) {
 
     fun getAllFav(): LiveData<List<UsernameFavoriteEntity>> = favDao.getAllFavorite()
 
-    fun getFavByGithubId(idGithub: Int): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubId(idGithub)
     fun getFavByGithubLogin(idLogin: String): LiveData<UsernameFavoriteEntity> = favDao.getFavByGithubLogin(idLogin)
     fun insertFav(fav: UsernameFavoriteEntity) {
         executorService.execute {

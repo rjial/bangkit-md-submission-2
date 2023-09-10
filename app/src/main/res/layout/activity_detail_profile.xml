@@ -88,7 +88,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tvDetailDescProfile"
                     app:tabIndicatorColor="?attr/colorOnPrimary"
                     app:tabIndicatorHeight="2dp"
-                    app:tabTextColor="@android:color/white" />
+                    app:tabTextColor="?attr/colorOnPrimary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

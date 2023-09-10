@@ -16,7 +16,6 @@ class FavoriteViewModel(application: Application): ViewModel() {
     fun deleteByLogin(login: String) = repository.deleteFavByLogin(login)
     fun getAll(): LiveData<List<UsernameFavoriteEntity>> = repository.getAllFav()
 
-    fun getFavByGithubId(idGithub: Int): LiveData<UsernameFavoriteEntity> = repository.getFavByGithubId(idGithub)
     fun getFavByGithubLogin(loginGithub: String): LiveData<UsernameFavoriteEntity> = repository.getFavByGithubLogin(loginGithub)
 
 }

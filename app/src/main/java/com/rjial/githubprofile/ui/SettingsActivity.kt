@@ -23,14 +23,10 @@ class SettingsActivity : AppCompatActivity() {
 
         setViewModel.isDarkMode.observe(this) {
             setViewModel.setDarkMode(it)
-            when(it) {
-                true -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-                false -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
+            AppCompatDelegate.setDefaultNightMode(when(it) {
+                true -> AppCompatDelegate.MODE_NIGHT_YES
+                false -> AppCompatDelegate.MODE_NIGHT_NO
+            })
         }
 
         supportFragmentManager

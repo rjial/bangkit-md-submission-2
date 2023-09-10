@@ -33,8 +33,12 @@ class FavoriteListAdapter: ListAdapter<UsernameFavoriteEntity, FavoriteListAdapt
     class ViewHolder(val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         private val apiService = ApiService.getService<SearchAPIInterface>()
         fun bind(fav: UsernameFavoriteEntity) {
-            binding.tvNameProfile.text = fav.name
-            binding.tvUsernameProfile.text = fav.login
+            if (fav.name != null) {
+                binding.tvNameProfile.text = fav.name
+                binding.tvUsernameProfile.text = fav.login
+            } else {
+                binding.tvNameProfile.text = fav.login
+            }
 
             Glide.with(binding.root.context)
                 .load(fav.avatarUrl)
