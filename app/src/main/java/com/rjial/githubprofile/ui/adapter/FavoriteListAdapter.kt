@@ -5,27 +5,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rjial.githubprofile.databinding.ItemProfilesBinding
 import com.rjial.githubprofile.model.db.entity.UsernameFavoriteEntity
 import com.rjial.githubprofile.ui.DetailProfileActivity
 
-class FavoriteListAdapter: ListAdapter<UsernameFavoriteEntity, FavoriteListAdapter.ViewHolder>(DIFF_CALLBACK) {
-    companion object {
-        val DIFF_CALLBACK = object: DiffUtil.ItemCallback<UsernameFavoriteEntity>() {
-            override fun areItemsTheSame(
-                oldItem: UsernameFavoriteEntity,
-                newItem: UsernameFavoriteEntity
-            ): Boolean = oldItem == newItem
+class FavoriteListAdapter: RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
+    private var listFav: ArrayList<UsernameFavoriteEntity> = arrayListOf<UsernameFavoriteEntity>()
+    class FavDiffCallback(val listFav: ArrayList<UsernameFavoriteEntity>, val newlistFav: ArrayList<UsernameFavoriteEntity>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = listFav.size
 
-            override fun areContentsTheSame(
-                oldItem: UsernameFavoriteEntity,
-                newItem: UsernameFavoriteEntity
-            ): Boolean = oldItem == newItem
+        override fun getNewListSize(): Int = newlistFav.size
 
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return listFav[oldItemPosition].id == newlistFav[newItemPosition].id
         }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return listFav[oldItemPosition].name == newlistFav[newItemPosition].name && listFav[oldItemPosition].login == newlistFav[newItemPosition].login
+        }
+    }
+
+    fun updateList(newlistFav: ArrayList<UsernameFavoriteEntity>) {
+        val diffCallback = FavDiffCallback(listFav, newlistFav)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.listFav.clear()
+        this.listFav.addAll(newlistFav)
+        diffResult.dispatchUpdatesTo(this)
     }
     class ViewHolder(val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(fav: UsernameFavoriteEntity) {
@@ -58,8 +65,10 @@ class FavoriteListAdapter: ListAdapter<UsernameFavoriteEntity, FavoriteListAdapt
         return ViewHolder(binding)
     }
 
+    override fun getItemCount(): Int = listFav.size
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fav = getItem(position)
+        val fav = listFav[position]
         holder.bind(fav)
     }
 
