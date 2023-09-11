@@ -1,7 +1,6 @@
 package com.rjial.githubprofile.model.viewmodel
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +8,7 @@ import com.rjial.githubprofile.model.response.ItemsItem
 import com.rjial.githubprofile.model.response.SearchGithubResponse
 import com.rjial.githubprofile.service.ApiService
 import com.rjial.githubprofile.service.SearchAPIInterface
+import com.rjial.githubprofile.util.EspressoIdlingResouce
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +28,7 @@ class SearchViewModel: ViewModel() {
     fun searchProfile(value: String) {
         _isLoading.value = true
         _searchText.value = value
+        EspressoIdlingResouce.increment()
         apiService.getSearchResult(value).enqueue(object: Callback<SearchGithubResponse>{
             override fun onResponse(
                 call: Call<SearchGithubResponse>,

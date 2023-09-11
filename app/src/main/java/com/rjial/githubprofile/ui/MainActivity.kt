@@ -11,6 +11,7 @@ import com.rjial.githubprofile.R
 import com.rjial.githubprofile.databinding.ActivityMainBinding
 import com.rjial.githubprofile.model.viewmodel.SearchViewModel
 import com.rjial.githubprofile.ui.adapter.SearchGithubAdapter
+import com.rjial.githubprofile.util.EspressoIdlingResouce
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -51,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         searchViewModel.searchResult.observe(this) {
             if(it != null) {
                 binding.rvProfiles.adapter= SearchGithubAdapter(it)
+                if (!EspressoIdlingResouce.idlingresource.isIdleNow) {
+                    EspressoIdlingResouce.decrement()
+                }
             }
         }
         searchViewModel.isLoading.observe(this) {
