@@ -12,24 +12,26 @@ import com.rjial.githubprofile.model.db.entity.UsernameFavoriteEntity
 import com.rjial.githubprofile.ui.DetailProfileActivity
 
 class FavoriteListAdapter: RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
-    private var listFav: ArrayList<UsernameFavoriteEntity> = arrayListOf<UsernameFavoriteEntity>()
-    class FavDiffCallback(val listFav: ArrayList<UsernameFavoriteEntity>, val newlistFav: ArrayList<UsernameFavoriteEntity>) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int = listFav.size
+    private var listFav: java.util.ArrayList<UsernameFavoriteEntity> = java.util.ArrayList<UsernameFavoriteEntity>()
 
-        override fun getNewListSize(): Int = newlistFav.size
+    fun updateList(newlistFav: java.util.ArrayList<UsernameFavoriteEntity>) {
+        val diffResult = DiffUtil.calculateDiff(object: DiffUtil.Callback() {
+            val oldlistFav = this@FavoriteListAdapter.listFav
+            override fun getOldListSize(): Int = oldlistFav.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return listFav[oldItemPosition].id == newlistFav[newItemPosition].id
-        }
+            override fun getNewListSize(): Int = newlistFav.size
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return listFav[oldItemPosition].name == newlistFav[newItemPosition].name && listFav[oldItemPosition].login == newlistFav[newItemPosition].login
-        }
-    }
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldlistFav[oldItemPosition].id!! == newlistFav[newItemPosition].id!!
+            }
 
-    fun updateList(newlistFav: ArrayList<UsernameFavoriteEntity>) {
-        val diffCallback = FavDiffCallback(listFav, newlistFav)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = oldlistFav[oldItemPosition]
+                val newItem = newlistFav[newItemPosition]
+                return oldItem.login == newItem.login && oldItem.name == newItem.name && oldItem.avatarUrl == newItem.avatarUrl
+            }
+
+        })
         this.listFav.clear()
         this.listFav.addAll(newlistFav)
         diffResult.dispatchUpdatesTo(this)

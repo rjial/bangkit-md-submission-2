@@ -3,7 +3,7 @@ package com.rjial.githubprofile.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -19,9 +19,6 @@ import com.rjial.githubprofile.ui.adapter.DetailStateAdapter
 class DetailProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailProfileBinding
     private lateinit var detailViewModel: DetailViewModel
-    private val favoriteViewModel: FavoriteViewModel by viewModels<FavoriteViewModel> {
-        FavViewModelFactory.getInstance(this)
-    }
     private var isFav: Boolean = false
     private var favoriteEntity: UsernameFavoriteEntity? = null
 
@@ -37,8 +34,10 @@ class DetailProfileActivity : AppCompatActivity() {
         val extra = intent.getStringExtra(DETAIL_PROFILE)
         if (extra == null) finish()
         supportActionBar?.hide()
+        val favFactory = FavViewModelFactory.getInstance(application)
+        val favoriteViewModel = ViewModelProvider(this@DetailProfileActivity, favFactory)[FavoriteViewModel::class.java]
         detailViewModel.getDetail(requireNotNull(extra))
-        detailViewModel.isLoading.observe(this) {
+        detailViewModel.isLoading.observe(this@DetailProfileActivity) {
             when(it) {
                 true -> {
                     binding.pbDetail.visibility = View.VISIBLE
@@ -57,13 +56,6 @@ class DetailProfileActivity : AppCompatActivity() {
                     binding.tvDetailUserNameProfile.visibility = View.VISIBLE
                     binding.tvDetailDescProfile.visibility = View.VISIBLE
                     binding.fabFavorite.visibility = View.VISIBLE
-                    binding.fabFavorite.setOnClickListener {
-                        if (isFav) {
-                            favoriteViewModel.deleteByLogin(extra)
-                        } else {
-                            favoriteViewModel.insert(favoriteEntity!!)
-                        }
-                    }
                 }
             }
         }
@@ -93,15 +85,25 @@ class DetailProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        favoriteViewModel.getFavByGithubLogin(extra).observe(this) {
+        favoriteViewModel.getFavByGithubLogin(extra).observe(this@DetailProfileActivity) {
             when(it != null) {
                 true -> {
                     isFav = true
+                    favoriteEntity = it
                     binding.fabFavorite.setImageDrawable(AppCompatResources.getDrawable(applicationContext, R.drawable.baseline_favorite_24))
+                    binding.fabFavorite.setOnClickListener { view ->
+                        favoriteViewModel.delete(it)
+                    }
                 }
                 false -> {
                     isFav = false
                     binding.fabFavorite.setImageDrawable(AppCompatResources.getDrawable(applicationContext, R.drawable.baseline_favorite_border_24))
+                    binding.fabFavorite.setOnClickListener { view ->
+                        if (favoriteEntity != null)
+                            favoriteViewModel.insert(favoriteEntity!!)
+                        else
+                            Toast.makeText(this@DetailProfileActivity, "Loading...", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
